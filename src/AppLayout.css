@@ -2,7 +2,7 @@
     --navbar-height: 44px;
     --app-height: 100vh;
     --sidebar-bg-color: gray;
-    --sidebar-width: 260px;
+    --sidebar-width: 160px;
 }
 
 .app {
@@ -54,7 +54,37 @@
 
     padding: 12px;
 }
+.sidebar-link,
+.sidebar-expand-btn {
+  width: 100%;
 
+  display: block;
+
+  padding: 10px;
+
+  border: none;
+
+  background: transparent;
+
+  text-align: left;
+
+  cursor: pointer;
+
+  text-decoration: none;
+
+  color: black;
+}
+
+.sidebar-link:hover,
+.sidebar-expand-btn:hover {
+  background: rgba(255,255,255,0.2);
+}
+
+.sidebar-link.active {
+    background: white;
+
+    font-weight: bold;
+}
 .sidebar-settings {
     padding: 16px;
 
