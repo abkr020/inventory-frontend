@@ -1,0 +1,70 @@
+:root {
+    --navbar-height: 44px;
+    --app-height: 100vh;
+    --sidebar-bg-color: gray;
+    --sidebar-width: 260px;
+}
+
+.app {
+    height: var(--app-height);
+
+    display: flex;
+    flex-direction: column;
+}
+
+.navbar {
+    height: var(--navbar-height);
+
+    border-bottom: 1px solid #e5e7eb;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 20px;
+
+    background: white;
+
+    flex-shrink: 0;
+}
+
+.container-aside-main {
+    height: calc(var(--app-height) - var(--navbar-height));
+
+    display: flex;
+
+    overflow: hidden;
+}
+
+.sidebar {
+    width: var(--sidebar-width);
+
+    background-color: var(--sidebar-bg-color);
+
+    display: flex;
+    flex-direction: column;
+
+    overflow: hidden;
+}
+
+.sidebar-content {
+    flex: 1;
+
+    overflow-y: auto;
+
+    padding: 12px;
+}
+
+.sidebar-settings {
+    padding: 16px;
+
+    border-top: 1px solid #ddd;
+}
+
+main {
+    flex: 1;
+
+    overflow-y: auto;
+
+    padding: 20px;
+}
