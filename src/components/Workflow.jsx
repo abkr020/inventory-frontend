@@ -1,22 +1,34 @@
-import React, { useState } from "react";
-import { LIBRARY_ISSUE_WORKFLOW } from "../constants/workflow";
+import React, { useEffect, useState } from "react";
 
 const Workflow = () => {
-    const [workflow] = useState(LIBRARY_ISSUE_WORKFLOW);
+    const [workflow, setWorkflow] = useState(null);
+
+    useEffect(() => {
+        load();
+    }, []);
+
+    const load = async () => {
+        const res = await fetch(
+            `${import.meta.env.VITE_BACKEND_URL}/api/workflows/4`
+        );
+
+        const data = await res.json();
+        setWorkflow(data);
+    };
+
+    if (!workflow) {
+        return <div>Loading...</div>;
+    }
 
     return (
-        <div
-            style={{
-                padding: "24px",
-            }}
-        >
+        <div style={{ padding: 20 }}>
             <h2>{workflow.name}</h2>
 
             <div
                 style={{
                     display: "flex",
                     alignItems: "center",
-                    gap: "16px",
+                    gap: 16,
                     flexWrap: "wrap",
                 }}
             >
@@ -24,46 +36,32 @@ const Workflow = () => {
                     <React.Fragment key={item.id}>
                         <div
                             style={{
-                                minWidth: "220px",
                                 border: "1px solid #ddd",
-                                borderRadius: "10px",
-                                padding: "16px",
+                                padding: 16,
+                                borderRadius: 10,
+                                minWidth: 220,
                             }}
                         >
-                            <div
-                                style={{
-                                    fontWeight: 700,
-                                    marginBottom: "8px",
-                                }}
-                            >
-                                Step {item.id}
-                            </div>
 
-                            <div>{item.step}</div>
+                            <h4>{item.step}</h4>
 
-                            <div
-                                style={{
-                                    marginTop: "10px",
-                                    fontSize: "14px",
-                                    color: "#666",
-                                }}
-                            >
-                                Allowed Roles:
+                            <div>
+                                <b>Roles:</b>
                             </div>
 
                             <div>
                                 {item.allowedRoles.join(", ")}
                             </div>
+
+                            {item.nextId && (
+                                <div style={{ marginTop: 8, fontSize: 12 }}>
+                                    Next → {item.nextId}
+                                </div>
+                            )}
                         </div>
 
                         {index < workflow.sequence.length - 1 && (
-                            <div
-                                style={{
-                                    fontSize: "28px",
-                                }}
-                            >
-                                →
-                            </div>
+                            <div style={{ fontSize: 24 }}>→</div>
                         )}
                     </React.Fragment>
                 ))}

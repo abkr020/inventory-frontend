@@ -5,6 +5,8 @@ import { useState } from "react";
 import Workflow from "./components/Workflow";
 import Navbar from "./components/Navbar";
 import Login from "./pages/Login";
+import Issue from "./pages/Issue";
+import AddStock from "./pages/AddStock";
 
 function App() {
   const [expanded, setExpanded] = useState({});
@@ -32,6 +34,14 @@ function App() {
       label: "Work flow",
       route: "/workflow",
     },
+    {
+      label: "Issue Book",
+      route: "/issue",
+    },
+    {
+  label: "Add Stock",
+  route: "/add-stock",
+},
   ];
 
   const toggle = (key) => {
@@ -120,6 +130,16 @@ function App() {
                 path="/login"
                 element={<Login />}
               />
+              <Route
+                path="/issue"
+                element={<Issue />}
+              />
+              <Route
+  path="/add-stock"
+  element={
+    <AddStock />
+  }
+/>
               <Route
                 path="/dashboard/main"
                 element={<h1>Main Dashboard</h1>}

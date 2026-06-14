@@ -3,29 +3,34 @@ import "./Login.css";
 
 const DUMMY_USERS = [
     {
+        id: 1,
         role: "Student",
         class: "10",
         section: "A",
         rollNumber: "12",
         email: "student.10.a.12@school.com",
-        password: "student123",
+        password: "student123"
     },
+
     {
+        id: 2,
         role: "Student",
         class: "12",
         section: "C",
         rollNumber: "07",
         email: "student.12.c.07@school.com",
-        password: "student123",
+        password: "student123"
     },
+
     {
+        id: 3,
         role: "Teacher",
         class: "10",
         section: "A",
         subject: "React",
         email: "teacher.10.a@school.com",
-        password: "teacher123",
-    },
+        password: "teacher123"
+    }
 ];
 
 function Login() {
@@ -58,6 +63,7 @@ function Login() {
         localStorage.setItem(
             "loggedInUser",
             JSON.stringify({
+                id:user.id,
                 role: user.role,
                 class: user.class,
                 section: user.section,
