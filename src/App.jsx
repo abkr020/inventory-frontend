@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, NavLink } from "react-router-dom";
 import "./App.css";
 import "./AppLayout.css";
 import { useState } from "react";
+import Workflow from "./components/Workflow";
 
 function App() {
   const [expanded, setExpanded] = useState({});
@@ -109,7 +110,7 @@ function App() {
               />
               <Route
                 path="/workflow"
-                element={<h1>workflow</h1>}
+                element={<Workflow />}
               />
 
               <Route
