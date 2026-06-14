@@ -73,3 +73,80 @@ input {
 
     cursor: pointer;
 }
+.login-card {
+    max-width: 900px;
+    width: 100%;
+}
+
+.demo-users h2 {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.user-section {
+    margin-bottom: 32px;
+}
+
+.user-section h3 {
+    margin-bottom: 12px;
+    color: #333;
+}
+
+.user-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
+}
+
+.user-card {
+    border: none;
+    cursor: pointer;
+    padding: 16px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    text-align: left;
+    transition: all 0.2s ease;
+    background: white;
+}
+
+.user-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+}
+
+.student {
+    border-left: 5px solid #2563eb;
+}
+
+.teacher {
+    border-left: 5px solid #16a34a;
+}
+
+.user-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: #f1f5f9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.user-info h4 {
+    margin: 0;
+    font-size: 15px;
+}
+
+.user-info p {
+    margin: 4px 0;
+    color: #555;
+}
+
+.user-info small {
+    color: #888;
+    word-break: break-all;
+}

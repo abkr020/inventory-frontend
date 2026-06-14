@@ -7,6 +7,7 @@ import Navbar from "./components/Navbar";
 import Login from "./pages/Login";
 import Issue from "./pages/Issue";
 import AddStock from "./pages/AddStock";
+import IssueInbox from "./pages/IssueInbox";
 
 function App() {
   const [expanded, setExpanded] = useState({});
@@ -37,6 +38,10 @@ function App() {
     {
       label: "Issue Book",
       route: "/issue",
+    },
+    {
+      label: "inbox",
+      route: "/inbox",
     },
     {
   label: "Add Stock",
@@ -140,6 +145,13 @@ function App() {
     <AddStock />
   }
 />
+              <Route
+  path="/inbox"
+  element={
+    <IssueInbox />
+  }
+/>
+
               <Route
                 path="/dashboard/main"
                 element={<h1>Main Dashboard</h1>}
