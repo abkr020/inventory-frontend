@@ -91,72 +91,92 @@ export default function Flow() {
                     id
             );
 
-    useLayoutEffect(
-        () => {
-            const computed =
-                [];
+useLayoutEffect(() => {
+    const computeEdges = () => {
+        const container =
+            containerRef.current;
 
-            rawEdges.forEach(
-                (
-                    edge
-                ) => {
-                    const source =
-                        document.getElementById(
-                            edge.source
-                        );
+        if (!container)
+            return;
 
-                    const target =
-                        document.getElementById(
-                            `node-${edge.target}`
-                        );
+        const containerRect =
+            container.getBoundingClientRect();
 
-                    if (
-                        !source ||
-                        !target
-                    )
-                        return;
+        const computed =
+            [];
 
-                    const container =
-                        containerRef.current.getBoundingClientRect();
-
-                    const s =
-                        source.getBoundingClientRect();
-
-                    const t =
-                        target.getBoundingClientRect();
-
-                    computed.push(
-                        {
-                            startX:
-                                s.left -
-                                container.left +
-                                s.width,
-
-                            startY:
-                                s.top -
-                                container.top +
-                                s.height /
-                                2,
-
-                            endX:
-                                t.left -
-                                container.left,
-
-                            endY:
-                                t.top -
-                                container.top +
-                                40,
-                        }
+        rawEdges.forEach(
+            (edge) => {
+                const source =
+                    document.getElementById(
+                        edge.source
                     );
-                }
-            );
 
-            setEdges(
-                computed
-            );
-        },
-        []
+                const target =
+                    document.getElementById(
+                        `node-${edge.target}`
+                    );
+
+                if (
+                    !source ||
+                    !target
+                )
+                    return;
+
+                const s =
+                    source.getBoundingClientRect();
+
+                const t =
+                    target.getBoundingClientRect();
+
+                computed.push({
+                    // action RIGHT border
+                    startX:
+                        s.right -
+                        containerRect.left,
+
+                    // action CENTER
+                    startY:
+                        s.top -
+                        containerRect.top +
+                        s.height /
+                            2,
+
+                    // container LEFT border
+                    endX:
+                        t.left -
+                        containerRect.left,
+
+                    // container CENTER
+                    endY:
+                        t.top -
+                        containerRect.top +
+                        t.height /
+                            2,
+                });
+            }
+        );
+
+        setEdges(
+            computed
+        );
+    };
+
+    requestAnimationFrame(
+        computeEdges
     );
+
+    window.addEventListener(
+        "resize",
+        computeEdges
+    );
+
+    return () =>
+        window.removeEventListener(
+            "resize",
+            computeEdges
+        );
+}, []);
 
     return (
         <div
@@ -165,19 +185,19 @@ export default function Flow() {
             }
             className="flow-container"
         >
-            {edges.map(
-                (
-                    edge,
-                    i
-                ) => (
-                    <Edge
-                        key={
-                            i
-                        }
-                        {...edge}
-                    />
-                )
-            )}
+<svg className="edge-layer">
+    {edges.map(
+        (
+            edge,
+            i
+        ) => (
+            <Edge
+                key={i}
+                {...edge}
+            />
+        )
+    )}
+</svg>
 
             {nodes.map(
                 (

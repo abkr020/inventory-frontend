@@ -4,28 +4,30 @@ export default function Edge({
     endX,
     endY,
 }) {
-    const mid =
-        (
-            startX +
-            endX
-        ) /
-        2;
+    const curve =
+        Math.abs(
+            endX -
+                startX
+        ) * 0.35;
 
     return (
-        <svg className="edge-layer">
-
-            <path
-                d={`
+        <path
+            d={`
                 M ${startX} ${startY}
-                C ${mid} ${startY},
-                  ${mid} ${endY},
-                  ${endX} ${endY}
-                `}
-                fill="none"
-                stroke="#444"
-                strokeWidth="3"
-            />
 
-        </svg>
+                C
+                ${startX + curve}
+                ${startY},
+
+                ${endX - curve}
+                ${endY},
+
+                ${endX}
+                ${endY}
+            `}
+            fill="none"
+            stroke="#555"
+            strokeWidth="3"
+        />
     );
 }
