@@ -5,8 +5,10 @@ export default function Edge({
     endY,
 }) {
     const mid =
-        (startX +
-            endX) /
+        (
+            startX +
+            endX
+        ) /
         2;
 
     return (
@@ -18,9 +20,9 @@ export default function Edge({
                 C ${mid} ${startY},
                   ${mid} ${endY},
                   ${endX} ${endY}
-            `}
+                `}
                 fill="none"
-                stroke="#555"
+                stroke="#444"
                 strokeWidth="3"
             />
 

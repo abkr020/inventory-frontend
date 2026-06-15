@@ -1,9 +1,15 @@
+import {
+    useLayoutEffect,
+    useRef,
+    useState,
+} from "react";
+
 import Node from "./components/Node";
 import Edge from "./components/Edge";
-import { LIBRARY_ISSUE_WORKFLOW } from "../constants/workflow";
-// import {
-//     LIBRARY_ISSUE_WORKFLOW,
-// } from "./workflow";
+
+import {
+    LIBRARY_ISSUE_WORKFLOW,
+} from "../constants/workflow";
 
 const nodes =
     LIBRARY_ISSUE_WORKFLOW.sequence.map(
@@ -19,13 +25,13 @@ const nodes =
             x:
                 index %
                     2 ===
-                0
+                    0
                     ? 100
                     : 600,
 
             y:
                 index *
-                    250 +
+                250 +
                 100,
 
             label:
@@ -36,7 +42,7 @@ const nodes =
         })
     );
 
-const edges = [];
+const rawEdges = [];
 
 LIBRARY_ISSUE_WORKFLOW.sequence.forEach(
     (
@@ -47,7 +53,7 @@ LIBRARY_ISSUE_WORKFLOW.sequence.forEach(
                 action,
                 index
             ) => {
-                edges.push({
+                rawEdges.push({
                     source:
                         `${step.id}-${index}`,
 
@@ -62,6 +68,17 @@ LIBRARY_ISSUE_WORKFLOW.sequence.forEach(
 );
 
 export default function Flow() {
+    const [
+        edges,
+        setEdges,
+    ] =
+        useState([]);
+
+    const containerRef =
+        useRef(
+            null
+        );
+
     const getNode =
         (
             id
@@ -74,13 +91,14 @@ export default function Flow() {
                     id
             );
 
-    return (
-        <div className="flow-container">
+    useLayoutEffect(
+        () => {
+            const computed =
+                [];
 
-            {edges.map(
+            rawEdges.forEach(
                 (
-                    edge,
-                    i
+                    edge
                 ) => {
                     const source =
                         document.getElementById(
@@ -88,42 +106,77 @@ export default function Flow() {
                         );
 
                     const target =
-                        getNode(
-                            edge.target
+                        document.getElementById(
+                            `node-${edge.target}`
                         );
 
                     if (
                         !source ||
                         !target
                     )
-                        return null;
+                        return;
 
-                    const rect =
+                    const container =
+                        containerRef.current.getBoundingClientRect();
+
+                    const s =
                         source.getBoundingClientRect();
 
-                    return (
-                        <Edge
-                            key={
-                                i
-                            }
-                            startX={
-                                rect.left +
-                                60
-                            }
-                            startY={
-                                rect.top +
-                                20
-                            }
-                            endX={
-                                target.x
-                            }
-                            endY={
-                                target.y +
-                                50
-                            }
-                        />
+                    const t =
+                        target.getBoundingClientRect();
+
+                    computed.push(
+                        {
+                            startX:
+                                s.left -
+                                container.left +
+                                s.width,
+
+                            startY:
+                                s.top -
+                                container.top +
+                                s.height /
+                                2,
+
+                            endX:
+                                t.left -
+                                container.left,
+
+                            endY:
+                                t.top -
+                                container.top +
+                                40,
+                        }
                     );
                 }
+            );
+
+            setEdges(
+                computed
+            );
+        },
+        []
+    );
+
+    return (
+        <div
+            ref={
+                containerRef
+            }
+            className="flow-container"
+        >
+            {edges.map(
+                (
+                    edge,
+                    i
+                ) => (
+                    <Edge
+                        key={
+                            i
+                        }
+                        {...edge}
+                    />
+                )
             )}
 
             {nodes.map(

@@ -7,6 +7,7 @@ export default function Node({
 }) {
     return (
         <div
+            id={`node-${id}`}
             className="node"
             style={{
                 left: x,
@@ -24,10 +25,10 @@ export default function Node({
                         index
                     ) => (
                         <div
+                            id={`${id}-${index}`}
                             key={
                                 index
                             }
-                            id={`${id}-${index}`}
                             className="action"
                         >
                             {

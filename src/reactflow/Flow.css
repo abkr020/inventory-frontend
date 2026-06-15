@@ -63,3 +63,16 @@
 
   pointer-events: none;
 }
+.edge-layer {
+  position: absolute;
+
+  inset: 0;
+
+  width: 3000px;
+
+  height: 3000px;
+
+  pointer-events: none;
+
+  overflow: visible;
+}
