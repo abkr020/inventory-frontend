@@ -1,3 +1,4 @@
+
 export const LIBRARY_ISSUE_WORKFLOW = {
   name: "Library Book Issue",
 
@@ -6,35 +7,54 @@ export const LIBRARY_ISSUE_WORKFLOW = {
       id: 1,
       step: "Request Book",
       allowedRoles: ["Student"],
-      nextId=12
+      actions: [
+        { lable: "approve", nextId: 12 }
+      ],
+
     },
 
     {
       id: 12,
       step: "Teacher Approval",
       allowedRoles: ["Class Teacher"],
-      nextId=3
+      actions: [
+        { lable: "approve", nextId: 3 },
+        { lable: "needUpdate", nextId: 1 },
+        { lable: "reject", nextId: "end" },
+      ],
+
     },
 
     {
       id: 3,
       step: "Check Availability",
       allowedRoles: ["Librarian"],
-      nextId=24
+      actions: [
+        { lable: "approve", nextId: 24 },
+        { lable: "needUpdate", nextId: 1 },
+        { lable: "reject", nextId: "end" },
+      ],
+      nextId: 24
     },
 
     {
       id: 24,
       step: "Issue Book",
       allowedRoles: ["Librarian"],
-      nextId=5
+      actions: [
+        { lable: "approve", nextId: 5 },
+
+      ],
+
     },
 
     {
       id: 5,
       step: "Receive Book",
       allowedRoles: ["Student"],
-      nextId="end"
+      actions: [
+        { lable: "approve", nextId: "end" },
+      ],
     },
 
     // {
@@ -49,4 +69,10 @@ export const LIBRARY_ISSUE_WORKFLOW = {
     //   allowedRoles: ["Librarian"],
     // },
   ],
+};
+
+export const WORKFLOWS = {
+  workflows: [
+    LIBRARY_ISSUE_WORKFLOW
+  ]
 };
