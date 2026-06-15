@@ -8,6 +8,7 @@ import Login from "./pages/Login";
 import Issue from "./pages/Issue";
 import AddStock from "./pages/AddStock";
 import IssueInbox from "./pages/IssueInbox";
+import Reactflow from "./reactflow/Reactflow";
 
 function App() {
   const [expanded, setExpanded] = useState({});
@@ -16,6 +17,10 @@ function App() {
     {
       label: "Home",
       route: "/",
+    },
+    {
+      label: "react flow",
+      route: "/reactflow",
     },
 
     {
@@ -134,6 +139,10 @@ function App() {
               <Route
                 path="/login"
                 element={<Login />}
+              />
+              <Route
+                path="/reactflow"
+                element={<Reactflow />}
               />
               <Route
                 path="/issue"
