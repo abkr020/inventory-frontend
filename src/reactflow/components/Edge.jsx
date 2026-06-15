@@ -1,19 +1,29 @@
 export default function Edge({
-  startX,
-  startY,
-  endX,
-  endY,
+    startX,
+    startY,
+    endX,
+    endY,
 }) {
-  return (
-    <svg className="edge-layer">
-      <line
-        x1={startX}
-        y1={startY}
-        x2={endX}
-        y2={endY}
-        stroke="#555"
-        strokeWidth="3"
-      />
-    </svg>
-  );
+    const mid =
+        (startX +
+            endX) /
+        2;
+
+    return (
+        <svg className="edge-layer">
+
+            <path
+                d={`
+                M ${startX} ${startY}
+                C ${mid} ${startY},
+                  ${mid} ${endY},
+                  ${endX} ${endY}
+            `}
+                fill="none"
+                stroke="#555"
+                strokeWidth="3"
+            />
+
+        </svg>
+    );
 }

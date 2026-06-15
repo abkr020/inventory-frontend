@@ -1,56 +1,143 @@
 import Node from "./components/Node";
 import Edge from "./components/Edge";
+import { LIBRARY_ISSUE_WORKFLOW } from "../constants/workflow";
+// import {
+//     LIBRARY_ISSUE_WORKFLOW,
+// } from "./workflow";
 
-const nodes = [
-    {
-        id: "1",
-        x: 100,
-        y: 150,
-        label: "Start",
-    },
-    {
-        id: "2",
-        x: 600,
-        y: 250,
-        label: "End",
-    },
-];
+const nodes =
+    LIBRARY_ISSUE_WORKFLOW.sequence.map(
+        (
+            step,
+            index
+        ) => ({
+            id:
+                String(
+                    step.id
+                ),
 
-const edges = [
-    {
-        source: "1",
-        target: "2",
-    },
-];
+            x:
+                index %
+                    2 ===
+                0
+                    ? 100
+                    : 600,
+
+            y:
+                index *
+                    250 +
+                100,
+
+            label:
+                step.step,
+
+            actions:
+                step.actions,
+        })
+    );
+
+const edges = [];
+
+LIBRARY_ISSUE_WORKFLOW.sequence.forEach(
+    (
+        step
+    ) => {
+        step.actions?.forEach(
+            (
+                action,
+                index
+            ) => {
+                edges.push({
+                    source:
+                        `${step.id}-${index}`,
+
+                    target:
+                        String(
+                            action.nextId
+                        ),
+                });
+            }
+        );
+    }
+);
 
 export default function Flow() {
-    const getNode = (id) =>
-        nodes.find((n) => n.id === id);
+    const getNode =
+        (
+            id
+        ) =>
+            nodes.find(
+                (
+                    n
+                ) =>
+                    n.id ===
+                    id
+            );
 
     return (
         <div className="flow-container">
 
-            {edges.map((edge) => {
-                const source = getNode(edge.source);
-                const target = getNode(edge.target);
+            {edges.map(
+                (
+                    edge,
+                    i
+                ) => {
+                    const source =
+                        document.getElementById(
+                            edge.source
+                        );
 
-                return (
-                    <Edge
-                        key={`${edge.source}-${edge.target}`}
-                        startX={source.x + 80}
-                        startY={source.y + 30}
-                        endX={target.x}
-                        endY={target.y + 30}
+                    const target =
+                        getNode(
+                            edge.target
+                        );
+
+                    if (
+                        !source ||
+                        !target
+                    )
+                        return null;
+
+                    const rect =
+                        source.getBoundingClientRect();
+
+                    return (
+                        <Edge
+                            key={
+                                i
+                            }
+                            startX={
+                                rect.left +
+                                60
+                            }
+                            startY={
+                                rect.top +
+                                20
+                            }
+                            endX={
+                                target.x
+                            }
+                            endY={
+                                target.y +
+                                50
+                            }
+                        />
+                    );
+                }
+            )}
+
+            {nodes.map(
+                (
+                    node
+                ) => (
+                    <Node
+                        key={
+                            node.id
+                        }
+                        {...node}
                     />
-                );
-            })}
-
-            {nodes.map((node) => (
-                <Node
-                    key={node.id}
-                    {...node}
-                />
-            ))}
+                )
+            )}
         </div>
     );
 }
