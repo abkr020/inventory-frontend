@@ -11,7 +11,7 @@
 }
 
 .node {
-        cursor: grab;
+    cursor: grab;
 
     user-select: none;
     position: absolute;
@@ -32,9 +32,11 @@
     z-index: 1;
     border: 1px solid rebeccapurple;
 }
+
 .node:active {
     cursor: grabbing;
 }
+
 .actions,
 .action {
     position: relative;
@@ -65,5 +67,38 @@
     height: 100%;
 
     pointer-events: none;
+    /* pointer-events: auto;  */
+
     z-index: 2;
+}
+
+.edge-add-btn {
+    width: 70px;
+
+    height: 34px;
+
+    border: none;
+
+    border-radius: 20px;
+
+    background: #6a40ff;
+
+    color: white;
+
+    cursor: pointer;
+
+    font-size: 13px;
+
+    box-shadow: 0 4px 10px rgba(0, 0, 0, .25);
+}
+
+.edge-add-btn:hover {
+    /* ! transform scale was creating the issue of fliker */
+    /* transform: scale(1.05); */
+    /* background: #7c52ff; */
+    /* color shift instead of size shift */
+    background: #211f25;
+    /* color shift instead of size shift */
+
+
 }
