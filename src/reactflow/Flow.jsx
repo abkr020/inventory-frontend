@@ -20,12 +20,12 @@ const INITIAL_NODES = [
 
     actions: [
       {
-        id: "action_1",
+        id: "1.1",
         label: "register",
         nextId: "2",
       },
       //   {
-      //     id: "action_2",
+      //     id: "1.2",
       //     label: "approve",
       //     nextId: "10",
       //   },
@@ -39,12 +39,12 @@ const INITIAL_NODES = [
     label: "teacher approve",
     actions: [
       {
-        id: "action_21",
+        id: "2.1",
         label: "approve",
         nextId: "10",
       },
       {
-        id: "action_22",
+        id: "2.2",
         label: "reject",
         nextId: "100",
       },
@@ -214,23 +214,71 @@ export default function Flow() {
     // node → node
     if (node.nextId) {
       edges.push({
+        sourceId: node?.id,
         source: `node-${node.id}`,
         target: `node-${node.nextId}`,
+        targetId: node?.nextId,
       });
     }
 
     // action → node
     node.actions?.forEach((action) => {
       edges.push({
+        sourceId: action?.id,
         source: `action-${action.id}`,
         target: `node-${action.nextId}`,
+        targetId: action?.nextId,
       });
     });
   });
-  useEffect(() => {
-    // console.log("edges", edges, "points", points);
-  }, [edges, points]);
+//   useEffect(() => {
+//     // console.log("edges", edges, "points", points);
+//   }, [edges, points]);
+function insertNodeBetween({
+  sourceId,
+  targetId,
+  x,
+  y,
+}) {
+  const newId = String(Date.now());
 
+  setNodes((prev) => {
+    const updated = prev.map((node) => {
+      if (node.id === sourceId) {
+        return {
+          ...node,
+          nextId: newId,
+        };
+      }
+
+      if (node.actions) {
+        return {
+          ...node,
+          actions: node.actions.map((a) =>
+            a.id === sourceId
+              ? {
+                  ...a,
+                  nextId: newId,
+                }
+              : a
+          ),
+        };
+      }
+
+      return node;
+    });
+
+    updated.push({
+      id: newId,
+      label: "New Node",
+      x,
+      y,
+      nextId: targetId,
+    });
+
+    return updated;
+  });
+}
   return (
     <div
       ref={containerRef}
@@ -277,6 +325,10 @@ export default function Flow() {
         return (
           <Edge
             key={edge.source + edge.target}
+            sourceId={edge?.sourceId}
+            targetId={edge?.targetId}
+              onAddNode={insertNodeBetween}
+
             {...closest}
 
             // startX={start.x}
