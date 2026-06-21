@@ -23,6 +23,8 @@ const INITIAL_NODES = [
         id: "1.1",
         label: "register",
         nextId: "2",
+        x: 20,
+        y: 70,
       },
       //   {
       //     id: "1.2",
@@ -42,11 +44,15 @@ const INITIAL_NODES = [
         id: "2.1",
         label: "approve",
         nextId: "10",
+        x: 20,
+        y: 70,
       },
       {
         id: "2.2",
         label: "reject",
         nextId: "100",
+        x: 130,
+        y: 70,
       },
     ],
   },
@@ -231,54 +237,49 @@ export default function Flow() {
       });
     });
   });
-//   useEffect(() => {
-//     // console.log("edges", edges, "points", points);
-//   }, [edges, points]);
-function insertNodeBetween({
-  sourceId,
-  targetId,
-  x,
-  y,
-}) {
-  const newId = String(Date.now());
+  //   useEffect(() => {
+  //     // console.log("edges", edges, "points", points);
+  //   }, [edges, points]);
+  function insertNodeBetween({ sourceId, targetId, x, y }) {
+    const newId = String(Date.now());
 
-  setNodes((prev) => {
-    const updated = prev.map((node) => {
-      if (node.id === sourceId) {
-        return {
-          ...node,
-          nextId: newId,
-        };
-      }
+    setNodes((prev) => {
+      const updated = prev.map((node) => {
+        if (node.id === sourceId) {
+          return {
+            ...node,
+            nextId: newId,
+          };
+        }
 
-      if (node.actions) {
-        return {
-          ...node,
-          actions: node.actions.map((a) =>
-            a.id === sourceId
-              ? {
-                  ...a,
-                  nextId: newId,
-                }
-              : a
-          ),
-        };
-      }
+        if (node.actions) {
+          return {
+            ...node,
+            actions: node.actions.map((a) =>
+              a.id === sourceId
+                ? {
+                    ...a,
+                    nextId: newId,
+                  }
+                : a,
+            ),
+          };
+        }
 
-      return node;
+        return node;
+      });
+
+      updated.push({
+        id: newId,
+        label: "New Node",
+        x,
+        y,
+        nextId: targetId,
+      });
+
+      return updated;
     });
-
-    updated.push({
-      id: newId,
-      label: "New Node",
-      x,
-      y,
-      nextId: targetId,
-    });
-
-    return updated;
-  });
-}
+  }
   return (
     <div
       ref={containerRef}
@@ -327,8 +328,7 @@ function insertNodeBetween({
             key={edge.source + edge.target}
             sourceId={edge?.sourceId}
             targetId={edge?.targetId}
-              onAddNode={insertNodeBetween}
-
+            onAddNode={insertNodeBetween}
             {...closest}
 
             // startX={start.x}
