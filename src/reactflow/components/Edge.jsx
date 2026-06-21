@@ -75,7 +75,7 @@ export default function Edge({
               className="edge-add-btn"
               onClick={(e) => {
                 e.stopPropagation();
-                alert("add node");
+                // alert("add node");
                 onAddNode({
                   sourceId,
                   targetId,
