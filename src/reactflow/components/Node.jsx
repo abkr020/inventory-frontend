@@ -10,8 +10,12 @@ const Node = forwardRef(
           left: x,
           top: y,
         }}
-        onMouseDown={(e) => onDragStart(id, e)}
       >
+        {/* Drag Handle */}
+        <div className="drag-handle" onMouseDown={(e) => onDragStart(id, e)}>
+          ⠿
+        </div>
+
         <div>id : {id}</div>
         <div>{label}</div>
 
@@ -22,7 +26,7 @@ const Node = forwardRef(
               ref={(el) => registerActionRef(action.id, el)}
               className="action"
             >
-                <div>id : {action?.id}</div>
+              <div>id : {action.id}</div>
               {action.label}
             </div>
           ))}
@@ -31,4 +35,5 @@ const Node = forwardRef(
     );
   },
 );
+
 export default Node;
