@@ -126,7 +126,10 @@ function App() {
 
           <main>
             <Routes>
-              <Route path="/" element={<h1>Home</h1>} />
+              <Route path="/" 
+               element={<Reactflow />}
+              
+              />
 
               <Route
                 path="/dashboard"
