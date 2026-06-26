@@ -34,11 +34,16 @@
 }
 
 /* Top ruler */
+/* rulers */
 
 .ruler-top {
+  position: relative;
+
   height: 30px;
 
   margin-left: 30px;
+
+  overflow: hidden;
 
   border-bottom: 1px solid #ccc;
 
@@ -60,21 +65,82 @@
   overflow: hidden;
 }
 
-/* Left ruler */
-
 .ruler-left {
+  position: relative;
+
   width: 30px;
 
-  flex-shrink: 0;
+  overflow: hidden;
 
   border-right: 1px solid #ccc;
 
   background:
     repeating-linear-gradient(to bottom,
-      #888 0px,
+      #888 0,
       #888 1px,
       transparent 1px,
       transparent 50px);
+}
+
+/* ruler labels */
+
+.ruler-number-top {
+  position: absolute;
+
+  top: 5px;
+
+  font-size: 10px;
+
+  transform: translateX(-50%);
+}
+
+.ruler-number-left {
+  position: absolute;
+
+  left: 3px;
+
+  font-size: 10px;
+
+  transform:
+    translateY(-50%);
+}
+
+/* moving guide */
+
+.cursor-v {
+  position: absolute;
+
+  top: 0;
+
+  bottom: 0;
+
+  width: 1px;
+
+  background: red;
+
+  pointer-events: none;
+}
+
+.cursor-h {
+  position: absolute;
+
+  left: 0;
+
+  right: 0;
+
+  height: 1px;
+
+  background: red;
+
+  pointer-events: none;
+}
+
+/* canvas guides */
+
+.canvas-line {
+  position: absolute;
+
+  z-index: 20;
 }
 
 /* Viewport */
