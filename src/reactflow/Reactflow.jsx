@@ -1,6 +1,7 @@
 import { useState } from "react";
 import "./Flow.css";
 import "./Popup.css";
+import Canvas from "./components/Canvas";
 
 export default function Reactflow() {
   const [showPopup, setShowPopup] = useState(true);
@@ -26,7 +27,13 @@ export default function Reactflow() {
             <div className="content">
               <div className="sidebar">Sidebar</div>
 
-              <div className="main">Main Container</div>
+              <div className="main">
+                Main Container
+                <Canvas>
+                  {/* <Flow /> */}
+                  <div>hi</div>
+                </Canvas>
+              </div>
             </div>
           </div>
         </div>
