@@ -1,9 +1,4 @@
-export default function Edge({
-  startX,
-  startY,
-  endX,
-  endY,
-}) {
+export default function Edge({ startX, startY, endX, endY }) {
   return (
     <svg className="edge-layer">
       <line
