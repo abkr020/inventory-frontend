@@ -507,7 +507,7 @@ export default function Flow() {
         <Node
           key={node.id}
           startResize={startResize}
-style={style}
+// style={style}
           {...node}
           onDragStart={startDrag}
           ref={(el) => {
