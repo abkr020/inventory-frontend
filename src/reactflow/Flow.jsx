@@ -11,6 +11,10 @@ const INITIAL_NODES = [
     y: 150,
     label: "start",
     nextId: "1",
+    style: {
+      height: "300px",
+      width: "350px",
+    },
   },
   {
     id: "1",
@@ -23,8 +27,12 @@ const INITIAL_NODES = [
         id: "1.1",
         label: "register",
         nextId: "2",
-        x: 20,
-        y: 70,
+        x: 0,
+        y: 0,
+        style: {
+          width: 120,
+          height: 80,
+        },
       },
       //   {
       //     id: "1.2",
@@ -74,6 +82,7 @@ const INITIAL_NODES = [
 export default function Flow() {
   const [nodes, setNodes] = useState(INITIAL_NODES);
   const dragRef = useRef(null);
+  const resizeRef = useRef(null);
   const nodeRefs = useRef({});
   const actionRefs = useRef({});
   const containerRef = useRef(null);
@@ -90,18 +99,48 @@ export default function Flow() {
       y: e.clientY - rect.top,
     });
   };
-  const startDrag = (id, e) => {
-    e.preventDefault();
+  const startResize = (type, nodeId, actionId, e) => {
+    e.stopPropagation();
 
-    const node = nodes.find((n) => n.id === id);
-
-    dragRef.current = {
-      id,
-
-      offsetX: e.clientX - node.x,
-
-      offsetY: e.clientY - node.y,
+    resizeRef.current = {
+      type,
+      nodeId,
+      actionId,
+      startX: e.clientX,
+      startY: e.clientY,
     };
+  };
+  const startDrag = (type, id, e) => {
+    e.stopPropagation();
+
+    if (type === "node") {
+      const node = nodes.find((n) => n.id === id);
+
+      dragRef.current = {
+        type,
+        id,
+        offsetX: e.clientX - node.x,
+        offsetY: e.clientY - node.y,
+      };
+    }
+
+    if (type === "action") {
+      const node = nodes.find((n) => n.actions?.some((a) => a.id === id));
+
+      const action = node.actions.find((a) => a.id === id);
+
+      const nodeRect = nodeRefs.current[node.id].getBoundingClientRect();
+
+      dragRef.current = {
+        type,
+        id,
+        nodeId: node.id,
+
+        offsetX: e.clientX - nodeRect.left - action.x,
+
+        offsetY: e.clientY - nodeRect.top - action.y,
+      };
+    }
   };
 
   const moveDrag = (e) => {
@@ -109,26 +148,150 @@ export default function Flow() {
 
     if (!dragRef.current) return;
 
-    const { id, offsetX, offsetY } = dragRef.current;
+    const drag = dragRef.current;
 
     setNodes((prev) =>
-      prev.map((node) =>
-        node.id === id
-          ? {
-              ...node,
+      prev.map((node) => {
+        // move node
+        if (drag.type === "node" && node.id === drag.id) {
+          return {
+            ...node,
+            x: e.clientX - drag.offsetX,
+            y: e.clientY - drag.offsetY,
+          };
+        }
 
-              x: e.clientX - offsetX,
+        // move action
+        if (
+  drag.type === "action" &&
+  node.id === drag.nodeId
+) {
+  const nodeEl =
+    nodeRefs.current[node.id];
 
-              y: e.clientY - offsetY,
-            }
-          : node,
-      ),
+  const rect =
+    nodeEl.getBoundingClientRect();
+
+  return {
+    ...node,
+
+    actions: node.actions.map((a) => {
+      if (a.id !== drag.id) return a;
+
+      const width =
+        a.style?.width || 120;
+
+      const height =
+        a.style?.height || 80;
+
+      return {
+        ...a,
+
+        x: Math.max(
+          0,
+          Math.min(
+            e.clientX -
+              rect.left -
+              drag.offsetX,
+            rect.width - width
+          )
+        ),
+
+        y: Math.max(
+          0,
+          Math.min(
+            e.clientY -
+              rect.top -
+              drag.offsetY,
+            rect.height - height
+          )
+        ),
+      };
+    }),
+  };
+}if (resizeRef.current) {
+  const r = resizeRef.current;
+
+  setNodes((prev) =>
+    prev.map((node) => {
+      if (
+        r.type === "node" &&
+        node.id === r.nodeId
+      ) {
+        return {
+          ...node,
+
+          style: {
+            ...node.style,
+
+            width: Math.max(
+              220,
+              e.clientX -
+                node.x
+            ),
+
+            height: Math.max(
+              120,
+              e.clientY -
+                node.y
+            ),
+          },
+        };
+      }
+
+      if (
+        r.type === "action" &&
+        node.id === r.nodeId
+      ) {
+        return {
+          ...node,
+
+          actions:
+            node.actions.map((a) =>
+              a.id === r.actionId
+                ? {
+                    ...a,
+
+                    style: {
+                      ...a.style,
+
+                      width: Math.max(
+                        80,
+                        e.clientX -
+                          node.x -
+                          a.x
+                      ),
+
+                      height: Math.max(
+                        50,
+                        e.clientY -
+                          node.y -
+                          a.y
+                      ),
+                    },
+                  }
+                : a
+            ),
+        };
+      }
+
+      return node;
+    })
+  );
+
+  return;
+}
+
+        return node;
+      }),
     );
   };
 
-  const stopDrag = () => {
-    dragRef.current = null;
-  };
+ const stopDrag = () => {
+  dragRef.current = null;
+
+  resizeRef.current = null;
+};
   useLayoutEffect(() => {
     const update = () => {
       const next = {};
@@ -343,6 +506,8 @@ export default function Flow() {
       {nodes.map((node) => (
         <Node
           key={node.id}
+          startResize={startResize}
+style={style}
           {...node}
           onDragStart={startDrag}
           ref={(el) => {
